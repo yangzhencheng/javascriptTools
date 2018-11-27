@@ -1,4 +1,4 @@
-﻿var rootUrl = "";
+var rootUrl = "";
 var isDebug = true;     // 调试模式
 
 if (isDebug) {
@@ -227,6 +227,8 @@ function isEmail(strEmail) {
 }
 
 
+// 取得年龄
+// 出生日期: val
 function getAge(val) {
     var date = new Date();
     var birthday = new Date(val);
@@ -241,3 +243,313 @@ function getAge(val) {
 
 
 
+// 列表跳转导航
+// obj -> HTML 中的 ID, page -> 当前第几页, totpage -> 总页数
+function listpager(obj, page, totpage) {
+    if (totpage <= 1) return;
+
+    
+
+    var url = request_del("page");
+    var ul = document.createElement("ul");
+    ul.setAttribute("class", "pagerlist");
+
+
+    // 首页 + 上一页
+    var firstli = document.createElement("li");
+    var provli = document.createElement("li");
+
+    if (1 == page) {
+        firstli.innerText = "首页";
+        provli.innerText = "上一页";
+        firstli.setAttribute("class", "n");
+        provli.setAttribute("class", "n");
+    }
+    else {
+        var a1 = document.createElement("a");
+        a1.setAttribute("href", request_set("page", 1));
+        var a2 = document.createElement("a");
+        a2.setAttribute("href", request_set("page", page - 1));
+
+
+        a1.innerText = "首页";
+        a2.innerText = "上一页";
+
+        firstli.appendChild(a1);
+        provli.appendChild(a2);
+    }
+    ul.appendChild(firstli);
+    ul.appendChild(provli);
+    
+    
+
+    // 列表循环
+    if (totpage <= 11) {
+
+        for (var i = 1; i <= totpage; i++) {
+            var li = document.createElement("li");
+
+
+            if (i == page) {
+                li.setAttribute("class", "active");
+                li.innerText = i;
+            }
+            else {
+                var a = document.createElement("a");
+                a.setAttribute("href", request_set("page", i));
+                a.innerText = i;
+                li.appendChild(a);
+            }
+
+            ul.appendChild(li);
+        }
+    }
+    else {
+        if (page <= 5) {
+            for (var i = 1; i <= 11; i++) {
+                var li = document.createElement("li");
+
+
+                if (i == page) {
+                    li.setAttribute("class", "active");
+                    li.innerText = i;
+                }
+                else {
+                    var a = document.createElement("a");
+                    a.setAttribute("href", request_set("page", i));
+                    a.innerText = i;
+                    li.appendChild(a);
+                }
+
+                ul.appendChild(li);
+            }
+        }
+        else if (page >= totpage - 5) {
+            for (var i = totpage - 10; i <= totpage; i++) {
+                var li = document.createElement("li");
+
+
+                if (i == page) {
+                    li.setAttribute("class", "active");
+                    li.innerText = i;
+                }
+                else {
+                    var a = document.createElement("a");
+                    a.setAttribute("href", request_set("page", i));
+                    a.innerText = i;
+                    li.appendChild(a);
+                }
+
+                ul.appendChild(li);
+            }
+        }
+        else {
+            for (var i = page - 5; i <= page + 5; i++) {
+                var li = document.createElement("li");
+
+
+                if (i == page) {
+                    li.setAttribute("class", "active");
+                    li.innerText = i;
+                }
+                else {
+                    var a = document.createElement("a");
+                    a.setAttribute("href", request_set("page", i));
+                    a.innerText = i;
+                    li.appendChild(a);
+                }
+
+                ul.appendChild(li);
+            }
+        }
+    }
+    
+
+    // 尾页 + 下一页
+    var lastli = document.createElement("li");
+    var nextli = document.createElement("li");
+
+    if (totpage == page) {
+        lastli.innerText = "尾页";
+        nextli.innerText = "下一页";
+        lastli.setAttribute("class", "n");
+        nextli.setAttribute("class", "n");
+    }
+    else {
+        var a1 = document.createElement("a");
+        a1.setAttribute("href", request_set("page", totpage));
+        var a2 = document.createElement("a");
+        a2.setAttribute("href", request_set("page", page + 1));
+
+
+        a1.innerText = "尾页";
+        a2.innerText = "下一页";
+
+        nextli.appendChild(a2);
+        lastli.appendChild(a1);
+
+    }
+    ul.appendChild(nextli);
+    ul.appendChild(lastli);
+
+    obj.appendChild(ul);
+}
+
+
+
+// 列表跳转导航（特制）
+function listpagerSet(obj, url, page, totpage) {
+    if (totpage <= 1) return;
+
+
+    var ul = document.createElement("ul");
+    ul.setAttribute("class", "pagerlist");
+
+
+    // 首页 + 上一页
+    var firstli = document.createElement("li");
+    var provli = document.createElement("li");
+
+    if (1 == page) {
+        firstli.innerText = "首页";
+        provli.innerText = "上一页";
+        firstli.setAttribute("class", "n");
+        provli.setAttribute("class", "n");
+    }
+    else {
+        var a1 = document.createElement("a");
+        a1.setAttribute("href", "javascript:void(0);");
+        a1.setAttribute("onclick", "setMenuContentArea('" + url_set(url, "page", 1) + "')");
+        var a2 = document.createElement("a");
+        a2.setAttribute("href", "javascript:void(0);");
+        a2.setAttribute("onclick", "setMenuContentArea('" + url_set(url, "page", page - 1) + "')");
+
+
+        a1.innerText = "首页";
+        a2.innerText = "上一页";
+
+        firstli.appendChild(a1);
+        provli.appendChild(a2);
+    }
+    ul.appendChild(firstli);
+    ul.appendChild(provli);
+
+
+
+    // 列表循环
+    if (totpage <= 11) {
+
+        for (var i = 1; i <= totpage; i++) {
+            var li = document.createElement("li");
+
+
+            if (i == page) {
+                li.setAttribute("class", "active");
+                li.innerText = i;
+            }
+            else {
+                var a = document.createElement("a");
+                a.setAttribute("href", "javascript:void(0);");
+                a.setAttribute("onclick", "setMenuContentArea('" + url_set(url, "page", i) + "')");
+                a.innerText = i;
+                li.appendChild(a);
+            }
+
+            ul.appendChild(li);
+        }
+    }
+    else {
+        if (page <= 5) {
+            for (var i = 1; i <= 11; i++) {
+                var li = document.createElement("li");
+
+
+                if (i == page) {
+                    li.setAttribute("class", "active");
+                    li.innerText = i;
+                }
+                else {
+                    var a = document.createElement("a");
+                    a.setAttribute("href", "javascript:void(0);");
+                    a.setAttribute("onclick", "setMenuContentArea('" + url_set(url, "page", i) + "')");
+                    a.innerText = i;
+                    li.appendChild(a);
+                }
+
+                ul.appendChild(li);
+            }
+        }
+        else if (page >= totpage - 5) {
+            for (var i = totpage - 10; i <= totpage; i++) {
+                var li = document.createElement("li");
+
+
+                if (i == page) {
+                    li.setAttribute("class", "active");
+                    li.innerText = i;
+                }
+                else {
+                    var a = document.createElement("a");
+                    a.setAttribute("href", "javascript:void(0);");
+                    a.setAttribute("onclick", "setMenuContentArea('" + url_set(url, "page", i) + "')");
+                    a.innerText = i;
+                    li.appendChild(a);
+                }
+
+                ul.appendChild(li);
+            }
+        }
+        else {
+            for (var i = page - 5; i <= page + 5; i++) {
+                var li = document.createElement("li");
+
+
+                if (i == page) {
+                    li.setAttribute("class", "active");
+                    li.innerText = i;
+                }
+                else {
+                    var a = document.createElement("a");
+                    a.setAttribute("href", "javascript:void(0);");
+                    a.setAttribute("onclick", "setMenuContentArea('" + url_set(url, "page", i) + "')");
+                    a.innerText = i;
+                    li.appendChild(a);
+                }
+
+                ul.appendChild(li);
+            }
+        }
+    }
+
+
+    // 尾页 + 下一页
+    var lastli = document.createElement("li");
+    var nextli = document.createElement("li");
+
+    if (totpage == page) {
+        lastli.innerText = "尾页";
+        nextli.innerText = "下一页";
+        lastli.setAttribute("class", "n");
+        nextli.setAttribute("class", "n");
+    }
+    else {
+        var a1 = document.createElement("a");
+        a1.setAttribute("href", "javascript:void(0);");
+        a1.setAttribute("onclick", "setMenuContentArea('" + url_set(url, "page", totpage) + "')");
+        var a2 = document.createElement("a");
+        a2.setAttribute("href", "javascript:void(0);");
+        a2.setAttribute("onclick", "setMenuContentArea('" + url_set(url, "page", page + 1) + "')");
+
+
+        a1.innerText = "尾页";
+        a2.innerText = "下一页";
+
+        nextli.appendChild(a2);
+        lastli.appendChild(a1);
+
+    }
+    ul.appendChild(nextli);
+    ul.appendChild(lastli);
+
+    obj.appendChild(ul);
+}
