@@ -1,3 +1,8 @@
+// Author: MysteriousMan
+// QQ: 724207239
+// https://github.com/yangzhencheng/javascriptTools
+
+
 var rootUrl = "";
 var isDebug = true;     // 调试模式
 
